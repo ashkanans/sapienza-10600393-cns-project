@@ -1,0 +1,401 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                            %
+%                    Read constant commands                  %
+%                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{resources/constants/images path/IMAGE_PATH.tex}
+\input{resources/constants/images path/IMAGE_NAMES.tex}
+\input{resources/constants/images path/IMAGE_REFS.tex}
+\input{resources/constants/configuration/GENERAL_CONFIGURATION.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                            %
+%                       Custom Commands                      %
+%                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Usage: \imageCaptionTable{image path}{image caption}{image label}{text}
+% - The first argument should be the path to the image file in any format.
+% - The second argument should be the caption of the image to be displayed.
+% - The third argument should be the label of the image.
+% - The fourth argument should be the text to be displayed on the right side of the image.
+% - The resulting table will have the image displayed on the left (with the caption and label) and the text on the right.
+
+\newcommand{\imageCaptionTable}[4]{%
+	\begin{tabular}{l l}
+		\includegraphics[width=0.5\textwidth, caption={#2}, label={#3}]{#1} & \centering
+		\begin{varwidth}[t]{0.8\textwidth}
+			\configuratedText{#4}
+		\end{varwidth}
+	\end{tabular}
+}
+
+% Inserts a small image in the middle of a text
+% Usage: \smallimage[optional scale]{image file name}
+% - The optional scale argument (default 0.5) can be used to adjust the size of the image.
+% - The image file should be in the same directory as the LaTeX document.
+
+\newcommand{\smallimage}[2][0.03]{
+	\includegraphics[width=#1\linewidth]{#2}
+}
+
+
+% Creates a new figure with an image centered on the page, and adds a caption and label for reference.
+% Usage: \sectionCenteredfigure[optional scale]{image file name}{caption text}{label}
+% - The optional scale argument (default 0.9) can be used to adjust the width of the image.
+% - The image file should be in the same directory as the LaTeX document.
+% - The caption text should describe the contents of the image.
+% - The label should be a unique identifier for the figure, used for referencing it later in the text.
+
+\newcommand{\sectionCenteredfigure}[4][0.9]{
+	\begin{figure}[H]
+		\centering
+		\fbox{\includegraphics[width=#1\linewidth]{#2}}
+		\caption{#3}
+		\label{fig:#4}
+	\end{figure}
+}
+
+
+% Creates a new block of justified text with a specified font and font size.
+% Usage: \generalText{font family}{font size}{text}
+% - The font family argument specifies the font to be used (e.g., Times New Roman, Arial, etc.).
+% - The font size argument specifies the size of the font (e.g., 12pt, 14pt, etc.).
+% - The text argument should contain the text to be justified.
+% - The resulting block of text will be fully justified (i.e., aligned with both the left and right margins).
+
+\newcommand{\customText}[3]{%
+	\par\begingroup
+	\setlength{\parindent}{0pt}%
+	\linespread{1.3}%
+	\fontsize{#2}{#2}%
+	\fontfamily{#1}\selectfont #3%
+	\par\endgroup%
+}
+
+% Creates a new block of justified text with the font size and font style of configuration file.
+% Usage: \generalText{text}
+% - The font family argument is specfied by \userManualSimpleTextStyle 
+% - The font size argument is specified by \userManualSimpleTextSize
+% - The text argument should contain the text to be justified.
+% - The resulting block of text will be fully justified (i.e., aligned with both the left and right margins).
+
+\newcommand{\configuratedText}[1]{%
+	\par\begingroup
+	\setlength{\parindent}{0pt}%
+	\linespread{1.3}%
+	\selectfont #1%
+	\par\endgroup%
+}
+
+% Defines a new command for referencing figures.
+% Usage: \figref{label}
+% - The argument should be the label of the figure to be referenced.
+% - The resulting output will be in the format "(Figure <number>)", where <number> is the number of the referenced figure.
+% - The label should be defined using \label{fig:<label>} command in the figure environment.
+% - The \hyperref command creates a hyperlink to the referenced figure.
+% - The \ref* command produces only the number of the referenced figure, without the preceding "Figure" text.
+
+\newcommand{\figref}[1]{(\hyperref[fig:#1]{Figure \ref*{fig:#1}})}
+
+% Creates a new table with an icon and its name.
+% Usage: \customTable{icon path}{icon name}
+% - The first argument should be the path to the icon file in PNG format.
+% - The second argument should be the name of the icon to be displayed.
+% - The resulting table will have the icon displayed on the left and its name on the right.
+
+\newcommand{\iconNameTable}[2]{%
+	\begin{tabular}{l l}
+		\includegraphics[width=0.03\textwidth]{#1} & \centering 
+		\begin{varwidth}[t]{0.8\textwidth}
+			\configuratedText{#2}
+		\end{varwidth}
+	\end{tabular}
+}
+
+% Creates a new table with an icon and its name.
+% Usage: \customTable{icon path}{icon name}
+% - The first argument should be a text.
+% - The second argument should be a text.
+% - The resulting table will have the text displayed on the left and a text on the right.
+
+\newcommand{\textTextTable}[3][2cm]{%
+	\begin{tabular}{p{#1} p{\dimexpr0.90\textwidth-#1}}
+		\configuratedText{#2}
+		&
+		\begin{varwidth}[t]{\linewidth}
+			\configuratedText{#3}
+		\end{varwidth}
+	\end{tabular}
+}
+
+% Creates a new table with an icon, its name, and its description.
+% Usage: \iconNameDescriptTable{icon path}{icon name}{icon description}
+% - The first argument should be the path to the icon file in PNG format.
+% - The second argument should be the name of the icon to be displayed.
+% - The third argument should be a description of the icon.
+% - The resulting table will have the icon displayed on the left, its name in the middle, and its description on the right.
+% - The table has three columns with widths of 0.1, 0.3, and 0.5 times the text width, respectively.
+% - The second and third columns are aligned to the left.
+
+\newcommand{\iconNameDescriptTable}[3]{%
+	\begin{tabular}{p{0.05\textwidth} p{0.2\textwidth} m{0.6\textwidth}}
+		\includegraphics[width=0.03\textwidth]{#1} & \raggedright \configuratedText{#2} & \justify \configuratedText{#3} \
+	\end{tabular}
+}
+
+% Creates a new table with an text, its name, and its description.
+% Usage: \textDescriptTable{text}{text name}{text description}
+% - The first argument should be the text to be displayed on the left.
+% - The second argument should be the name of the text.
+% - The third argument should be a description of the text.
+% - The resulting table will have the text displayed on the left, its name in the middle, and its description on the right.
+% - The table has three columns with widths of 0.1, 0.3, and 0.5 times the text width, respectively.
+% - The second and third columns are aligned to the left.
+
+\newcommand{\textDescriptTable}[3]{%
+	\begin{tabular}{m{0.1\textwidth} m{0.1\textwidth} m{0.5\textwidth}}
+		\raggedright \configuratedText{#1} & \raggedright \configuratedText{#2} & \raggedright \configuratedText{#3} \
+	\end{tabular}
+}
+
+% Creates a new block of two columns with an image on the left and justified text on the right.
+% Usage: \twocolumns{optional scale}{image file name}{caption text}{font family}{font size}{text}
+
+% - 1: The optional scale argument (default 0.9) can be used to adjust the width of the image.
+% - 2: The image file should be in the same directory as the LaTeX document.
+% - 3: The caption text should describe the contents of the image.
+% - 4: The font family argument specifies the font to be used (e.g., Times New Roman, Arial, etc.).
+% - 5: The font size argument specifies the size of the font (e.g., 12pt, 14pt, etc.).
+% - 6: The text argument should contain the text to be justified.
+
+\newcommand{\twoColumns}[6]{
+	\begin{minipage}[t]{0.50\textwidth}
+		\customText{#4}{#5}{#6}
+	\end{minipage}\hfill
+	\begin{minipage}[r]{0.45\textwidth}
+
+	\end{minipage}
+}
+
+\documentclass[\userManualSimpleTextSize]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{tocloft}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{times}
+\usepackage{wrapfig}
+\usepackage{array}
+\usepackage{varwidth}
+\usepackage{float}
+\usepackage{titlesec}
+\usepackage{ragged2e}
+\usepackage{listings}
+
+% Use the new command to set the font sizes and titleformat settings
+\myheadingstyles
+
+% Customize hyperlinks in the document
+\hypersetup{
+	colorlinks=true, % enable colored hyperlinks
+	linkcolor=black, % set the color of internal links to black
+	filecolor=magenta, % set the color of links to local files to magenta
+	urlcolor=blue, % set the color of links to URLs to blue
+	bookmarks=true, % enable the creation of bookmarks in the PDF file
+}
+
+\geometry{
+	a4paper, % set paper size to A4
+	left=2cm, % set left margin to 2cm
+	right=2cm, % set right margin to 2cm
+	top=2.5cm, % set top margin to 2.5cm
+	bottom=2.5cm % set bottom margin to 2.5cm
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                            %
+%                    Document Starts Here                    %
+%                                                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+	
+	\begin{center}
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=0.4\linewidth]{\cnsFiveTwelve}
+		\end{figure}
+		\vspace{1cm} 
+		{\fontsize{28}{34}\selectfont \textbf{Application Level Security\\ Practical Project}}
+	\end{center}
+
+	\vspace{1cm} 
+	
+	\begin{center}
+	{\fontsize{22}{28}\selectfont \textbf{Professor: E. Coppa}}
+	\end{center}
+
+	\vspace{1cm} 
+
+	\textcolor{blue!60!black}{\rule{\linewidth}{2pt}}
+	
+	\vspace{8cm} 
+	
+	\begin{center}
+	\textbf{A.Y. 2022/23}
+	\end{center}
+
+	\thispagestyle{empty}
+	
+	\newpage
+	
+	\myTOC
+	
+	\newpage
+	\section{Introduction}
+	\configuratedText{Web application security is a critical concern for organizations and individuals alike, as the potential risks and consequences of an attack can be significant. One aspect of web application security is application level security, which involves protecting the application itself from various types of vulnerabilities and attacks. As part of a Cyber Security course, this report focuses on the architecture of Django, a powerful web application, as well as the identification and analysis of two types of vulnerabilities in this framework: bypassing access control based on URL paths and SQL injection. In this report, we will provide an overview of the web application and framework's architecture, describe the two identified vulnerabilities, discuss how the vulnerabilities were patched by the community, and provide guidance on how to prevent or mitigate these types of vulnerabilities in the future. Additionally, we will provide a Docker environment that reproduces the vulnerabilities to demonstrate a strong understanding of the framework and the vulnerabilities.\\}
+	
+	\newpage
+	\section{Django Architecture}
+	\configuratedText{Django is a popular open-source web application framework written in Python. It follows the \textbf{Model-View-Controller} (MVC) architectural pattern, which separates the application into three interconnected components: the Model, which manages the application's data and logic; the View, which handles the presentation layer and user interface; and the Controller, which manages the flow of data between the Model and the View.\\
+	
+	In Django, the Model is represented by the database schema, which is defined using Python classes. The View is represented by the Python functions or classes that handle HTTP requests and generate responses. The Controller is represented by the URL routing system, which maps incoming requests to the appropriate View.\\
+	
+	Other key components of a Django application include templates, which define the presentation layer and are typically written in HTML with embedded Python code; and forms, which provide a convenient way to handle user input and validate data.\\
+	
+	Django also includes a powerful administrative interface, which allows developers to manage the application's data and configuration without writing any code. Django's architecture is designed to be flexible, scalable, and easy to maintain, making it a popular choice for building complex web applications.\\}
+	
+	\newpage
+	\section{Vulnerabilities - Description}
+	\configuratedText{In Django, the resolvers.py module is responsible for converting requested URLs to callback view functions. The URLResolver class is the main class in this module, and its resolve() method takes a URL as a string and returns a ResolverMatch object that provides access to all attributes of the resolved URL match.\\
+		
+	The URLResolver class uses regular expressions to match requested URLs to URL patterns defined in the Django application's urls.py module. Once a match is found, the ResolverMatch object is returned, which provides access to attributes such as the view function that should handle the request.}
+
+	\newpage
+	\section{Vulnerabilities - Exploitation}
+	\configuratedText{\begin{enumerate}
+			\item First, create a new directory for the project:
+			
+			\begin{lstlisting}[language=bash]
+				mkdir django-vulnerability-demo
+				cd django-vulnerability-demo
+			\end{lstlisting}
+			
+			\item Create a new virtual environment and activate it:
+			
+			\begin{lstlisting}[language=bash]
+				python3 -m venv venv
+				source venv/bin/activate
+			\end{lstlisting}
+			
+			\item Install Django version 3.1 in the virtual environment:
+			
+			\begin{lstlisting}[language=bash]
+				pip install Django==3.1
+			\end{lstlisting}
+			
+			\item Create a new Django project:
+			
+			\begin{lstlisting}[language=bash]
+				django-admin startproject demo_project
+				cd demo_project
+			\end{lstlisting}
+			
+			\item Create a new app within the project:
+			
+			\begin{lstlisting}[language=bash]
+				python manage.py startapp demo_app
+			\end{lstlisting}
+			
+			\item In demo\_project/settings.py, add the app to the INSTALLED\_APPS list:
+			
+			\begin{lstlisting}[language=Python]
+				INSTALLED_APPS = [
+				'demo_app',
+				'django.contrib.admin',
+				'django.contrib.auth',
+				'django.contrib.contenttypes',
+				'django.contrib.sessions',
+				'django.contrib.messages',
+				'django.contrib.staticfiles',
+				]
+			\end{lstlisting}
+			
+			\item In demo\_app/views.py, create a new view that requires authentication to access:
+			
+			\begin{lstlisting}[language=Python]
+				from django.contrib.auth.decorators import login_required
+				from django.http import HttpResponse
+				
+				@login_required
+				def protected_view(request):
+				return HttpResponse("This is a protected view!")
+			\end{lstlisting}
+			
+			\item In demo\_app/urls.py, create a new URL pattern for the protected view:
+			
+			\begin{lstlisting}[language=Python]
+				from django.urls import path
+				from . import views
+				
+				urlpatterns = [
+				path('protected/', views.protected_view, name='protected'),
+				]
+			\end{lstlisting}
+			
+			\item In demo\_project/urls.py, include the URLs from the app:
+			
+			\begin{lstlisting}[language=Python]
+				from django.contrib import admin
+				from django.urls import include, path
+				
+				urlpatterns = [
+				path('admin/', admin.site.urls),
+				path('', include('demo_app.urls')),
+				]
+			\end{lstlisting}
+			
+			\item Start the Django development server:
+			
+			\begin{lstlisting}[language=bash]
+				python manage.py runserver
+			\end{lstlisting}
+			
+			\item Open a new terminal window and use curl to access the protected view without authentication:
+			
+			\begin{lstlisting}[language=bash]
+				curl http://localhost:8000/protected/
+			\end{lstlisting}
+			
+			You should see a response that says "302 FOUND" and redirects you to the login page. This is because the @login\_required decorator requires authentication to access the protected view.
+			
+			\item Now, try accessing the protected view with a URL that has a trailing newline character:
+			
+			\begin{lstlisting}[language=bash]
+				curl http://localhost:8000/protected/%0a
+			\end{lstlisting}
+			
+			You should see a response that says "This is a protected view!" even though you have not authenticated. This is because the newline character at the end of the URL causes Django to treat it as a separate URL, which is not subject to the access control imposed by the @login\_required decorator.
+	\end{enumerate}}
+
+	\newpage
+	\section{Vulnerabilities - Patched}
+	\configuratedText{The logic behind the issue is related to how Django handles URL path matching. In Django, URL patterns are defined using regular expressions, which are compiled into a regex object that is used to match incoming requests against the defined patterns.\\
+	
+	The issue with the previous implementation of the match method is that it used the search method of the regex object to match the incoming request path. The search method looks for the pattern anywhere in the string, so it can match even if there is additional content after the end of the pattern. This means that a URL with a trailing newline character would match the pattern, even if it was not intended to.\\
+	
+	The fix implemented in the new version of Django changes the way that URL pattern matching is performed. It uses the fullmatch method of the regex object instead of the search method, which requires the entire string to match the pattern. Additionally, it checks if the pattern ends with a $\$$ character, which indicates an endpoint, and only uses the fullmatch method if the pattern is an endpoint. If the pattern is not an endpoint, it falls back to using the search method.\\
+	
+	The modification to the match method adds a new condition that appends the \textbackslash Z character to the regex pattern if the pattern is an endpoint. The \textbackslash Z character matches the end of the string, so it ensures that there is no additional content after the end of the URL pattern. This ensures that URLs with trailing newline characters are not matched by the pattern, even if they are not intended to be.
+	
+	This description can be seen on the main branch in the \underline{resolver} class \figref{CVE-2021-45115-Issue-On-Main-Branch}
+	}
+
+	\sectionCenteredfigure{\cveIssueCompareMainBranch}{CVE 2021 45115 Issue On Main Branch Comparison}{CVE-2021-45115-Issue-On-Main-Branch}
+\end{document}
