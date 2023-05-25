@@ -279,111 +279,73 @@
 
 	\newpage
 	\section{Vulnerabilities - Exploitation}
-	\configuratedText{\begin{enumerate}
-			\item First, create a new directory for the project:
-			
-			\begin{lstlisting}[language=bash]
-				mkdir django-vulnerability-demo
-				cd django-vulnerability-demo
-			\end{lstlisting}
-			
-			\item Create a new virtual environment and activate it:
-			
-			\begin{lstlisting}[language=bash]
-				python3 -m venv venv
-				source venv/bin/activate
-			\end{lstlisting}
-			
-			\item Install Django version 3.1 in the virtual environment:
-			
-			\begin{lstlisting}[language=bash]
-				pip install Django==3.1
-			\end{lstlisting}
-			
-			\item Create a new Django project:
-			
-			\begin{lstlisting}[language=bash]
-				django-admin startproject demo_project
-				cd demo_project
-			\end{lstlisting}
-			
-			\item Create a new app within the project:
-			
-			\begin{lstlisting}[language=bash]
-				python manage.py startapp demo_app
-			\end{lstlisting}
-			
-			\item In demo\_project/settings.py, add the app to the INSTALLED\_APPS list:
-			
-			\begin{lstlisting}[language=Python]
-				INSTALLED_APPS = [
-				'demo_app',
+	
+	\configuratedText{First, create a new directory for the project:}
+	
+		\begin{verbatim}
+			mkdir 	django-vulnerability-demo
+			cd 		django-vulnerability-demo
+		\end{verbatim}
+	
+	\configuratedText{Create a new virtual environment and activate it:}			
+	
+		\begin{verbatim}
+			python3 -m venv venv
+			venv\Scripts\activate.bat
+		\end{verbatim}
+
+	\configuratedText{Install Django version 3.1 in the virtual environment:}
+	
+		\begin{verbatim}
+			pip install Django==3.1
+		\end{verbatim}
+
+	\configuratedText{Create a new Django project:}
+		\begin{verbatim}
+			django-admin startproject demo_project
+			cd demo_project
+		\end{verbatim}
+
+	\configuratedText{Create a new app within the project:}
+		\begin{verbatim}
+			python manage.py startapp demo_app
+		\end{verbatim}
+
+	\configuratedText{In demo\_project/settings.py, add the app to the INSTALLED\_APPS list:}	
+		\begin{verbatim}
+			INSTALLED_APPS = [	'demo_app',
 				'django.contrib.admin',
-				'django.contrib.auth',
-				'django.contrib.contenttypes',
-				'django.contrib.sessions',
+				'django.contrib.auth',	'django.contrib.contenttypes',	
+				'django.contrib.sessions',	
 				'django.contrib.messages',
 				'django.contrib.staticfiles',
-				]
-			\end{lstlisting}
-			
-			\item In demo\_app/views.py, create a new view that requires authentication to access:
-			
-			\begin{lstlisting}[language=Python]
-				from django.contrib.auth.decorators import login_required
-				from django.http import HttpResponse
-				
-				@login_required
-				def protected_view(request):
-				return HttpResponse("This is a protected view!")
-			\end{lstlisting}
-			
-			\item In demo\_app/urls.py, create a new URL pattern for the protected view:
-			
-			\begin{lstlisting}[language=Python]
-				from django.urls import path
-				from . import views
-				
-				urlpatterns = [
-				path('protected/', views.protected_view, name='protected'),
-				]
-			\end{lstlisting}
-			
-			\item In demo\_project/urls.py, include the URLs from the app:
-			
-			\begin{lstlisting}[language=Python]
-				from django.contrib import admin
-				from django.urls import include, path
-				
-				urlpatterns = [
-				path('admin/', admin.site.urls),
-				path('', include('demo_app.urls')),
-				]
-			\end{lstlisting}
-			
-			\item Start the Django development server:
-			
-			\begin{lstlisting}[language=bash]
-				python manage.py runserver
-			\end{lstlisting}
-			
-			\item Open a new terminal window and use curl to access the protected view without authentication:
-			
-			\begin{lstlisting}[language=bash]
-				curl http://localhost:8000/protected/
-			\end{lstlisting}
-			
-			You should see a response that says "302 FOUND" and redirects you to the login page. This is because the @login\_required decorator requires authentication to access the protected view.
-			
-			\item Now, try accessing the protected view with a URL that has a trailing newline character:
-			
-			\begin{lstlisting}[language=bash]
-				curl http://localhost:8000/protected/%0a
-			\end{lstlisting}
-			
-			You should see a response that says "This is a protected view!" even though you have not authenticated. This is because the newline character at the end of the URL causes Django to treat it as a separate URL, which is not subject to the access control imposed by the @login\_required decorator.
-	\end{enumerate}}
+			]		
+		\end{verbatim}
 
+	\configuratedText{In demo\_app/views.py, create a new view that requires authentication to access:}
+		\begin{verbatim}
+			from django.contrib.auth.decorators import login_required
+			from django.http import HttpResponse
+			
+			@login_required
+			def protected_view(request):
+			return HttpResponse("This is a protected view!")
+		\end{verbatim}
+
+	\configuratedText{Create a new Django project:}
+		\begin{verbatim}
+	
+		\end{verbatim}
+
+	\configuratedText{Create a new Django project:}
+		\begin{verbatim}
+			
+		\end{verbatim}
+
+	\configuratedText{Create a new Django project:}
+		\begin{verbatim}
+			
+		\end{verbatim}
 	\newpage
 	\section{Vulnerabilities - Patched}
 	\configuratedText{The logic behind the issue is related to how Django handles URL path matching. In Django, URL patterns are defined using regular expressions, which are compiled into a regex object that is used to match incoming requests against the defined patterns.\\
